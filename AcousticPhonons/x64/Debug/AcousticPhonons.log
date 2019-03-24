@@ -1,0 +1,2 @@
+﻿Ge_Shear.obj : error LNK2019: ссылка на неразрешенный внешний символ "void __cdecl sgeev(char *,char *,int *,float *,int *,float *,float *,float *,int *,float *,int *,float *,int *,int *)" (?sgeev@@YAXPEAD0PEAHPEAM1222121211@Z) в функции main
+C:\Users\armyc_000\source\repos\AcousticPhonons\x64\Debug\AcousticPhonons.exe : fatal error LNK1120: неразрешенных внешних элементов: 1

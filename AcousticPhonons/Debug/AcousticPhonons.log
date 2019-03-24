@@ -1,0 +1,12 @@
+﻿  oneLayerShear.cpp
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(43): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(62): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(77): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(78): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(79): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(85): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(86): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(87): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(88): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\acousticphonons\acousticphonons\src\onelayershear.cpp(235): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  AcousticPhonons.vcxproj -> C:\Users\armyc_000\source\repos\AcousticPhonons\Debug\AcousticPhonons.exe
