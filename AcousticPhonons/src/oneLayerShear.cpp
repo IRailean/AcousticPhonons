@@ -85,8 +85,8 @@ int solveOneLayerShear(std::string element)
 	for (int k = 0; k < numOfWaveVectorValues; k++)
 	{
 		matrix[k][0][0] = coefU_current[k];
-		matrix[k][0][1] = coefU_previous;
-		matrix[k][dotsAmount - 1][dotsAmount - 2] = coefU_next;
+		matrix[k][0][1] = coefU_previous + coefU_next;
+		matrix[k][dotsAmount - 1][dotsAmount - 2] = coefU_next + coefU_previous;
 		matrix[k][dotsAmount - 1][dotsAmount - 1] = coefU_current[k];
 	}
 	/* Calculate eigenvalues using sgeev */
