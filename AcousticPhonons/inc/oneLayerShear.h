@@ -9,12 +9,12 @@
 /* Function prototypes begin */
 
 int solveOneLayerShear(std::string);
-void setConstants(std::string element);
-float*** init3DMatrixWithZeros();
-float** calculateEigenvalues(float***);
-void writeEnergiesToFile(std::string, float**);
-void writeGroupVelocitiesToFile(std::string, float**);
-float** eigenvaluesToEnergy(float**, int, int);
+static void setConstants(std::string element);
+static float*** init3DMatrixWithZeros();
+static float** calculateEigenvalues(float***);
+static void writeEnergiesToFile(std::string, float**);
+static void writeGroupVelocitiesToFile(std::string, float**);
+static float** eigenvaluesToEnergy(float**, int, int);
 
 /* Function prototypes end */
 

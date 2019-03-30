@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\oneLayerShear.cpp" />
+    <ClCompile Include="src\threeLayerShear.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\oneLayerShear.h" />
     <ClInclude Include="inc\main.h" />
+    <ClInclude Include="inc\threeLayerShear.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

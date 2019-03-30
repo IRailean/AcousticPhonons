@@ -27,12 +27,18 @@
     <ClCompile Include="src\oneLayerShear.cpp">
       <Filter>Исходные файлы\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\threeLayerShear.cpp">
+      <Filter>Исходные файлы\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\main.h">
       <Filter>Исходные файлы\inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\oneLayerShear.h">
+      <Filter>Исходные файлы\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\threeLayerShear.h">
       <Filter>Исходные файлы\inc</Filter>
     </ClInclude>
   </ItemGroup>

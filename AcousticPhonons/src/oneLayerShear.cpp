@@ -15,26 +15,26 @@
 constexpr double Pi = 3.14159265359;
 
 /* Elastic modules */
-double c44;
+double static c44;
 
 /* Lattice constants */
-double latticeConstant;
+double static latticeConstant;
 
 /* Densities*/
-double density;
+double static density;
 
 // Number of dots
 // This shows how much dots we place along the axis X3 
 constexpr int dotsAmount = 100;
 
 // Structure width (nm)
-double width = 6;
+double static width = 6;
 
 // Step size along X3 axis
-double step = width / dotsAmount;
+double static step = width / dotsAmount;
 
 // Wave vector number of values
-int numOfWaveVectorValues;
+static int numOfWaveVectorValues;
 
 #define N dotsAmount
 #define LDA N
@@ -128,7 +128,7 @@ int solveOneLayerShear(std::string element)
 	_getch();
 	return 0;
 }
-void setConstants(std::string element)
+static void setConstants(std::string element)
 {
 	if (strcmp("Ge", element.c_str()) == 0)
 	{
@@ -147,7 +147,7 @@ void setConstants(std::string element)
 		std::cout << "Wrong choice !";
 	}
 }
-float*** init3DMatrixWithZeros()
+static float*** init3DMatrixWithZeros()
 {
 	float ***matrix = new float**[numOfWaveVectorValues];
 	for (int k = 0; k < numOfWaveVectorValues; k++)
@@ -164,7 +164,7 @@ float*** init3DMatrixWithZeros()
 	}
 	return matrix;
 }
-float** calculateEigenvalues(float*** matrix)
+static float** calculateEigenvalues(float*** matrix)
 {
 	int n = N, lda = LDA, ldvl = LDVL, ldvr = LDVR, info, lwork;
 	float wkopt;
@@ -208,7 +208,7 @@ float** calculateEigenvalues(float*** matrix)
 	}
 	return eigenvalues;
 }
-void writeEnergiesToFile(std::string filename, float** energies)
+static void writeEnergiesToFile(std::string filename, float** energies)
 {
 	std::ofstream myFile;
 	myFile.open(filename);
@@ -223,7 +223,7 @@ void writeEnergiesToFile(std::string filename, float** energies)
 	}
 	myFile.close();
 }
-void writeGroupVelocitiesToFile(std::string filename, float** groupVelocities)
+static void writeGroupVelocitiesToFile(std::string filename, float** groupVelocities)
 {
 	std::ofstream myFile;
 	myFile.open(filename);
@@ -238,7 +238,7 @@ void writeGroupVelocitiesToFile(std::string filename, float** groupVelocities)
 	}
 	myFile.close();
 }
-float** eigenvaluesToEnergy(float** eigenvalues, int sizeA, int sizeB)
+static float** eigenvaluesToEnergy(float** eigenvalues, int sizeA, int sizeB)
 {
 	float** energies = new float*[sizeA];
 	for (int i = 0; i < sizeA; i++)
