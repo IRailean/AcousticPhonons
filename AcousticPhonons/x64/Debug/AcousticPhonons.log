@@ -1,2 +1,14 @@
-﻿Ge_Shear.obj : error LNK2019: ссылка на неразрешенный внешний символ "void __cdecl sgeev(char *,char *,int *,float *,int *,float *,float *,float *,int *,float *,int *,float *,int *,int *)" (?sgeev@@YAXPEAD0PEAHPEAM1222121211@Z) в функции main
-C:\Users\armyc_000\source\repos\AcousticPhonons\x64\Debug\AcousticPhonons.exe : fatal error LNK1120: неразрешенных внешних элементов: 1
+﻿  main.cpp
+  oneLayerShear.cpp
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(43): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(62): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(77): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(78): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(79): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(85): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(86): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(87): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(88): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayershear.cpp(235): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  Создание кода...
+  AcousticPhonons.vcxproj -> C:\Users\armyc_000\source\repos\GitAcousticPhonons\AcousticPhonons\x64\Debug\AcousticPhonons.exe

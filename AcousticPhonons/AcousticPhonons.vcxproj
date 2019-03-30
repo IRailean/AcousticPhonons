@@ -103,7 +103,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\Intel Parallel Studio\compilers_and_libraries_2019.1.144\windows\mkl\include\intel64;E:\Intel Parallel Studio\compilers_and_libraries_2019.1.144\windows\mkl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>inc;E:\Intel Parallel Studio\compilers_and_libraries_2019.1.144\windows\mkl\include\intel64;E:\Intel Parallel Studio\compilers_and_libraries_2019.1.144\windows\mkl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

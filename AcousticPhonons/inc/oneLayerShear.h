@@ -1,3 +1,5 @@
+#include <string>
+
 #ifndef ONE_LAYER_SHEAR_H
 #define ONE_LAYER_SHEAR_H
 
