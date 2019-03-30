@@ -3,8 +3,7 @@
 
 int main()
 {
-	//test
-	int retVal = solveOneLayerShear();
+	int retVal = solveOneLayerShear("Si");
 
 	return retVal;
 }

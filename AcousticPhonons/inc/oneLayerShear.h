@@ -8,7 +8,8 @@
 
 /* Function prototypes begin */
 
-int solveOneLayerShear();
+int solveOneLayerShear(std::string);
+void setConstants(std::string element);
 float*** init3DMatrixWithZeros();
 float** calculateEigenvalues(float***);
 void writeEnergiesToFile(std::string, float**);

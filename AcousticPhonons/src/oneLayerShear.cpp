@@ -15,16 +15,13 @@
 constexpr double Pi = 3.14159265359;
 
 /* Elastic modules */
-// Elastic modules for Germanium
-double c44_Ge = 67.7;
+double c44;
 
 /* Lattice constants */
-// Lattice constant for Germanium (nm)
-double latticeConstant_Ge = 0.5658;
+double latticeConstant;
 
 /* Densities*/
-// Density for Germanium (kg/m3)
-double density_Ge = 5.323;
+double density;
 
 // Number of dots
 // This shows how much dots we place along the axis X3 
@@ -36,11 +33,8 @@ double width = 6;
 // Step size along X3 axis
 double step = width / dotsAmount;
 
-// Wave vector values
-double qFirst = 0;
-double qLast = (2 * Pi) / latticeConstant_Ge;
-double qStep = (Pi / 128) / latticeConstant_Ge;
-int numOfWaveVectorValues = (qLast - qFirst) / qStep;
+// Wave vector number of values
+int numOfWaveVectorValues;
 
 #define N dotsAmount
 #define LDA N
@@ -49,11 +43,19 @@ int numOfWaveVectorValues = (qLast - qFirst) / qStep;
 
 /* Constants declarations end */
 
-int solveOneLayerShear()
+int solveOneLayerShear(std::string element)
 {
+	setConstants(element);
+
+	// Wave vector values
+	double qFirst = 0;
+	double qLast = (2 * Pi) / latticeConstant;
+	double qStep = (Pi / 128) / latticeConstant;
+	numOfWaveVectorValues = (qLast - qFirst) / qStep;
+
 	/* Calculate wave vector values and coefficients */
-	double coefU_previous = -c44_Ge / (density_Ge * pow(step, 2));
-	double coefU_next = -c44_Ge / (density_Ge * pow(step, 2));
+	double coefU_previous = -c44 / (density * pow(step, 2));
+	double coefU_next = -c44 / (density * pow(step, 2));
 	double *coefU_current = new double[numOfWaveVectorValues];
 
 	float *qValues = new float[numOfWaveVectorValues];
@@ -63,7 +65,7 @@ int solveOneLayerShear()
 	}
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
-		coefU_current[i] = 2 * c44_Ge * (2 * pow(sin(qValues[i] * latticeConstant_Ge / 2), 2) / pow(latticeConstant_Ge, 2) + 1 / pow(step, 2)) / density_Ge;
+		coefU_current[i] = 2 * c44 * (2 * pow(sin(qValues[i] * latticeConstant / 2), 2) / pow(latticeConstant, 2) + 1 / pow(step, 2)) / density;
 	}
 
 	/* Init matrix with zero values */
@@ -125,6 +127,25 @@ int solveOneLayerShear()
 	delete qValues;
 	_getch();
 	return 0;
+}
+void setConstants(std::string element)
+{
+	if (strcmp("Ge", element.c_str()) == 0)
+	{
+		c44 = 67.7;
+		latticeConstant = 0.5658;
+		density = 5.323;
+	}
+	else if (strcmp("Si", element.c_str()) == 0)
+	{
+		c44 = 79.6;
+		latticeConstant = 0.5431;
+		density = 2.329;
+	}
+	else
+	{
+		std::cout << "Wrong choice !";
+	}
 }
 float*** init3DMatrixWithZeros()
 {
