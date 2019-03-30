@@ -1,12 +1,12 @@
 ﻿  threeLayerShear.cpp
 c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(44): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(121): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(142): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(143): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(144): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(127): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(148): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(149): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(150): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(151): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(152): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(153): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(300): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(156): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(157): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(158): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(159): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(306): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   AcousticPhonons.vcxproj -> C:\Users\armyc_000\source\repos\GitAcousticPhonons\AcousticPhonons\x64\Debug\AcousticPhonons.exe

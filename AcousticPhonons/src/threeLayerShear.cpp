@@ -73,9 +73,11 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 	double secondLeftBorder = width_Si + width_Ge - deltaL / 2;
 	double secondRightBorder = width_Si + width_Ge + deltaL / 2;
 
+	// alpha is dc44/dx3, where x3 is the axis along which layers are placed
 	double *c44 = new double[dotsAmount];
 	double *latticeConstant = new double[dotsAmount];
 	double *density = new double[dotsAmount];
+	double *alpha = new double[dotsAmount];
 
 	// Set constants in dependency of dot position, i.e where the dot is placed in structure
 	for (int i = 0; i < dotsAmount; i++)
@@ -83,6 +85,7 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 		double dotPos = i * width / dotsAmount;
 		if (dotPos < firstLeftBorder)
 		{
+			alpha[i] = 0;
 			c44[i] = c44_Ge;
 			density[i] = density_Ge;
 			latticeConstant[i] = latticeConstant_Ge;
@@ -90,12 +93,14 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 		else if (dotPos >= firstLeftBorder && dotPos < firstRightBorder)
 		{
 			double deltaZ = firstRightBorder - dotPos;
+			alpha[i] = (c44_Ge - c44_Si) / -deltaL;
 			c44[i] = (deltaZ*c44_Ge + (deltaL - deltaZ)*c44_Si) / deltaL;
 			density[i] = (deltaZ*density_Ge + (deltaL - deltaZ)*density_Si) / deltaL;
 			latticeConstant[i] = (deltaZ*latticeConstant_Ge + (deltaL - deltaZ)*latticeConstant_Si) / deltaL;
 		}
 		else if (dotPos >= firstRightBorder && dotPos < secondLeftBorder)
 		{
+			alpha[i] = 0;
 			c44[i] = c44_Si;
 			density[i] = density_Si;
 			latticeConstant[i] = latticeConstant_Si;
@@ -103,12 +108,14 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 		else if (dotPos > secondLeftBorder && dotPos < secondRightBorder)
 		{
 			double deltaZ = secondRightBorder - dotPos;
+			alpha[i] = (c44_Si - c44_Ge) / -deltaL;
 			c44[i] = (deltaZ*c44_Si + (deltaL - deltaZ)*c44_Ge) / deltaL;
 			density[i] = (deltaZ*density_Si + (deltaL - deltaZ)*density_Ge) /deltaL;
 			latticeConstant[i] = (deltaZ*latticeConstant_Si + (deltaL - deltaZ)*latticeConstant_Ge) / deltaL;
 		}
 		else if (dotPos >= secondRightBorder)
 		{
+			alpha[i] = 0;
 			c44[i] = c44_Ge;
 			density[i] = density_Ge;
 			latticeConstant[i] = latticeConstant_Ge;
@@ -124,9 +131,9 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 	{
 		for (int i = 0; i < dotsAmount; i++)
 		{
-			coefU_previous[k][i] = -(c44[i] / (density[i] * pow(step, 2)));
+			coefU_previous[k][i] = -(alpha[i] / (density[i] * 2 * step) + c44[i] / (density[i] * pow(step, 2)));
 			coefU_current[k][i] = (2 * c44[i] / density[i]) * ((2 * pow(sin(qValues[k] * latticeConstant[i] / 2), 2) / pow(latticeConstant[i], 2)) + 1 / pow(step, 2));
-			coefU_next[k][i] = -(c44[i] / (density[i] * pow(step, 2)));
+			coefU_next[k][i] = -(-alpha[i] / (density[i] * 2 * step) + c44[i] / (density[i] * pow(step, 2)));
 		}
 	}
 	
