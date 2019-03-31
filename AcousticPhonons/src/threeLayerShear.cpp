@@ -19,8 +19,8 @@ static double  c44_Ge = 67.7;
 static double c44_Si = 79.6;
 
 /* Lattice constants */
-static double  latticeConstant_Ge = 0.5658;
-static double latticeConstant_Si = 0.5431;
+static double  latticeConstant_Ge = 0.5431;
+static double latticeConstant_Si = 0.5658;
 
 /* Densities*/
 static double density_Ge = 5.323;
@@ -28,19 +28,20 @@ static double density_Si = 2.329;
 
 // Number of dots
 // This shows how much dots we place along the axis X3 
-constexpr int dotsAmount = 50;
+constexpr int dotsAmount = 100;
 
 // Structure width (nm)
 static double  width = 6;
 
 // Step size along X3 axis
-static double step = width / dotsAmount;
+static double step = width / (double)dotsAmount;
 
 // Wave vector number of values
 // Wave vector values
+static int divider = 128;
 static double qFirst = 0;
-static double qLast = (2 * Pi) / latticeConstant_Ge;
-static double qStep = (Pi / 128) / latticeConstant_Ge;
+static double qLast = (2 * Pi) / latticeConstant_Si;
+static double qStep = (Pi / divider) / latticeConstant_Si;
 static int numOfWaveVectorValues = (qLast - qFirst) / qStep;
 
 #define N dotsAmount
@@ -64,7 +65,6 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 		coefU_current[k] = new double[dotsAmount];
 		coefU_next[k] = new double[dotsAmount];
 	}
-
 	/* Determine constants in three layer structure using linear function with deltaL nm transition */
 	// Calculate borders position due to width of Ge and Si layers
 	double deltaL = 0.5;
@@ -121,8 +121,9 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 			latticeConstant[i] = latticeConstant_Ge;
 		}
 	}
+
 	/* Set wave vector values */
-	float *qValues = new float[numOfWaveVectorValues];
+	double *qValues = new double[numOfWaveVectorValues];
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
 		qValues[i] = qFirst + i * qStep;
@@ -131,24 +132,24 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 	{
 		for (int i = 0; i < dotsAmount; i++)
 		{
-			coefU_previous[k][i] = -(alpha[i] / (density[i] * 2 * step) + c44[i] / (density[i] * pow(step, 2)));
-			coefU_current[k][i] = (2 * c44[i] / density[i]) * ((2 * pow(sin(qValues[k] * latticeConstant[i] / 2), 2) / pow(latticeConstant[i], 2)) + 1 / pow(step, 2));
-			coefU_next[k][i] = -(-alpha[i] / (density[i] * 2 * step) + c44[i] / (density[i] * pow(step, 2)));
+			coefU_previous[k][i] = -(c44[i] / (density[i] * pow(step, 2)));
+			coefU_current[k][i] = (2 * c44[i] / density[i]) * ((2 * pow(sin(k*(Pi/ divider) / 2), 2) / pow(latticeConstant[i], 2)) + 1 / pow(step, 2));
+			coefU_next[k][i] = -(c44[i] / (density[i] * pow(step, 2)));
 		}
 	}
 	
 	
 	/* Init matrix with zero values */
-	float ***matrix = init3DMatrixWithZeros();
+	double ***matrix = init3DMatrixWithZeros();
 
 	/* Fill matrix with coefficients from equations */
 	for (int k = 0; k < numOfWaveVectorValues; k++)
 	{
 		for (int i = 1; i < dotsAmount - 1; i++)
 		{
-			matrix[k][i][i - 1] = coefU_next[k][i];
+			matrix[k][i][i - 1] = coefU_previous[k][i];
 			matrix[k][i][i] = coefU_current[k][i];
-			matrix[k][i][i + 1] = coefU_previous[k][i];
+			matrix[k][i][i + 1] = coefU_next[k][i];
 		}
 	}
 	/* Add boundary conditions*/
@@ -159,29 +160,31 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 		matrix[k][dotsAmount - 1][dotsAmount - 2] = coefU_next[k][dotsAmount - 1] + +coefU_previous[k][dotsAmount - 1];
 		matrix[k][dotsAmount - 1][dotsAmount - 1] = coefU_current[k][dotsAmount - 1];
 	}
+
 	/* Calculate eigenvalues using sgeev */
-	float** eigenvalues = calculateEigenvalues(matrix);
+	double** eigenvalues = calculateEigenvalues(matrix);
 
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
 		eigenvalues[i][0] = qValues[i];
 	}
-	float** energies = eigenvaluesToEnergy(eigenvalues, numOfWaveVectorValues, dotsAmount + 1);
+	double** energies = eigenvaluesToEnergy(eigenvalues, numOfWaveVectorValues, dotsAmount + 1);
+
 	/* Calculate group velocities */
-	float** groupVelocities = new float*[numOfWaveVectorValues - 1];
+	double** groupVelocities = new double*[numOfWaveVectorValues - 1];
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
-		groupVelocities[i] = new float[dotsAmount];
+		groupVelocities[i] = new double[dotsAmount];
 	}
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
 		groupVelocities[i][0] = qValues[i];
 	}
-	for (int i = 0; i < numOfWaveVectorValues - 1; i++)
+	for (int i = 1; i < numOfWaveVectorValues - 1; i++)
 	{
 		for (int j = 1; j < dotsAmount; j++)
 		{
-			groupVelocities[i][j] = (energies[i + 1][j] - energies[i][j]) / (qValues[i + 1] - qValues[i]);
+			groupVelocities[i][j] = (energies[i + 1][j] - energies[i - 1][j]) / (2*qStep);
 		}
 	}
 	/* Output results */
@@ -198,15 +201,15 @@ int solveThreeLayerShear(double width_Ge, double width_Si)
 	_getch();
 	return 0;
 }
-static float*** init3DMatrixWithZeros()
+static double*** init3DMatrixWithZeros()
 {
-	float ***matrix = new float**[numOfWaveVectorValues];
+	double ***matrix = new double**[numOfWaveVectorValues];
 	for (int k = 0; k < numOfWaveVectorValues; k++)
 	{
-		matrix[k] = new float*[dotsAmount];
+		matrix[k] = new double*[dotsAmount];
 		for (int i = 0; i < dotsAmount; i++)
 		{
-			matrix[k][i] = new float[dotsAmount];
+			matrix[k][i] = new double[dotsAmount];
 			for (int j = 0; j < dotsAmount; j++)
 			{
 				matrix[k][i][j] = 0;
@@ -215,17 +218,17 @@ static float*** init3DMatrixWithZeros()
 	}
 	return matrix;
 }
-static float** calculateEigenvalues(float*** matrix)
+static double** calculateEigenvalues(double*** matrix)
 {
 	int n = N, lda = LDA, ldvl = LDVL, ldvr = LDVR, info, lwork;
-	float wkopt;
-	float *work;
-	float wr[N], wi[N], vl[N*N], vr[N*N];
+	double wkopt;
+	double *work;
+	double wr[N], wi[N], vl[N*N], vr[N*N];
 
-	float **eigenvalues = new float*[numOfWaveVectorValues];
+	double **eigenvalues = new double*[numOfWaveVectorValues];
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
-		eigenvalues[i] = new float[dotsAmount + 1];
+		eigenvalues[i] = new double[dotsAmount + 1];
 	}
 
 	/* Calculate eigenvalues for matrices for each wave vector value */
@@ -233,7 +236,7 @@ static float** calculateEigenvalues(float*** matrix)
 	{
 		lwork = -1;
 		/* temp array is needed to convert from 2D matrix to 1D representation */
-		float *temp = new float[dotsAmount*dotsAmount];
+		double *temp = new double[dotsAmount*dotsAmount];
 
 		for (int i = 0; i < dotsAmount*dotsAmount; i++)
 		{
@@ -241,10 +244,10 @@ static float** calculateEigenvalues(float*** matrix)
 		}
 
 
-		sgeev((char*)"Vectors", (char*)"Vectors", &n, temp, &lda, wr, wi, vl, &ldvl, vr, &ldvr, &wkopt, &lwork, &info);
+		dgeev((char*)"Vectors", (char*)"Vectors", &n, temp, &lda, wr, wi, vl, &ldvl, vr, &ldvr, &wkopt, &lwork, &info);
 		lwork = (int)wkopt;
-		work = new float[lwork];
-		sgeev((char*)"Vectors", (char*)"Vectors", &n, temp, &lda, wr, wi, vl, &ldvl, vr, &ldvr, work, &lwork, &info);
+		work = new double[lwork];
+		dgeev((char*)"Vectors", (char*)"Vectors", &n, temp, &lda, wr, wi, vl, &ldvl, vr, &ldvr, work, &lwork, &info);
 		if (info > 0)
 		{
 			std::cout << "Failed to calculate";
@@ -259,7 +262,7 @@ static float** calculateEigenvalues(float*** matrix)
 	}
 	return eigenvalues;
 }
-static void writeEnergiesToFile(std::string filename, float** energies)
+static void writeEnergiesToFile(std::string filename, double** energies)
 {
 	std::ofstream myFile;
 	myFile.open(filename);
@@ -274,7 +277,7 @@ static void writeEnergiesToFile(std::string filename, float** energies)
 	}
 	myFile.close();
 }
-static void writeGroupVelocitiesToFile(std::string filename, float** groupVelocities)
+static void writeGroupVelocitiesToFile(std::string filename, double** groupVelocities)
 {
 	std::ofstream myFile;
 	myFile.open(filename);
@@ -289,12 +292,12 @@ static void writeGroupVelocitiesToFile(std::string filename, float** groupVeloci
 	}
 	myFile.close();
 }
-static float** eigenvaluesToEnergy(float** eigenvalues, int sizeA, int sizeB)
+static double** eigenvaluesToEnergy(double** eigenvalues, int sizeA, int sizeB)
 {
-	float** energies = new float*[sizeA];
+	double** energies = new double*[sizeA];
 	for (int i = 0; i < sizeA; i++)
 	{
-		energies[i] = new float[sizeB];
+		energies[i] = new double[sizeB];
 	}
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
@@ -304,7 +307,7 @@ static float** eigenvaluesToEnergy(float** eigenvalues, int sizeA, int sizeB)
 	{
 		for (int j = 1; j < sizeB; j++)
 		{
-			energies[i][j] = 0.658*sqrt(eigenvalues[i][j]);
+			energies[i][j] = 0.6582119514*sqrt(eigenvalues[i][j]);
 		}
 	}
 	delete[] eigenvalues;

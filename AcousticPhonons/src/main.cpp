@@ -1,5 +1,5 @@
 #include <iostream>
-#include "oneLayerShear.h"
+//#include "oneLayerShear.h"
 #include "threeLayerShear.h"
 
 int main()

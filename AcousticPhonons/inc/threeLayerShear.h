@@ -9,11 +9,11 @@
 /* Function prototypes begin */
 
 int solveThreeLayerShear(double, double);
-static float*** init3DMatrixWithZeros();
-static float** calculateEigenvalues(float***);
-static void writeEnergiesToFile(std::string, float**);
-static void writeGroupVelocitiesToFile(std::string, float**);
-static float** eigenvaluesToEnergy(float**, int, int);
+static double*** init3DMatrixWithZeros();
+static double** calculateEigenvalues(double***);
+static void writeEnergiesToFile(std::string, double**);
+static void writeGroupVelocitiesToFile(std::string, double**);
+static double** eigenvaluesToEnergy(double**, int, int);
 
 /* Function prototypes end */
 
