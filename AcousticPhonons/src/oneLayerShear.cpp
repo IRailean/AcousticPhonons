@@ -5,7 +5,7 @@
 #include <string>
 #include <stdlib.h>
 #include <algorithm>
-
+#include <iomanip>
 #include "mkl_lapack.h" 
 #include "oneLayerShear.h"
 
@@ -97,22 +97,32 @@ int solveOneLayerShear(std::string element)
 		eigenvalues[i][0] = qValues[i];
 	}
 	float** energies = eigenvaluesToEnergy(eigenvalues, numOfWaveVectorValues, dotsAmount + 1);
+
 	/* Calculate group velocities */
-	float** groupVelocities = new float*[numOfWaveVectorValues - 1];
+	float** groupVelocities = new float*[numOfWaveVectorValues + 1];
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
-		groupVelocities[i] = new float[dotsAmount];
+		groupVelocities[i] = new float[dotsAmount + 1];
 	}
 	for (int i = 0; i < numOfWaveVectorValues; i++)
 	{
 		groupVelocities[i][0] = qValues[i];
 	}
-	for (int i = 0; i < numOfWaveVectorValues - 1; i++)
+
+	for (int i = 1; i < numOfWaveVectorValues - 1; i++)
 	{
-		for (int j = 1; j < dotsAmount; j++)
+		for (int j = 1; j <  dotsAmount + 1; j++)
 		{
-			groupVelocities[i][j] = (energies[i + 1][j] - energies[i][j]) / (qValues[i + 1] - qValues[i]);
+			groupVelocities[i][j] = (1.0/0.658) * (energies[i + 1][j] - energies[i - 1][j]) / (2 * qStep);
 		}
+	}
+	for (int j = 1; j < dotsAmount + 1; j++)
+	{
+		groupVelocities[0][j] = (1.0 / 0.658) * (energies[1][j] - energies[0][j]) / qStep;
+	}
+	for (int j = 1; j < dotsAmount + 1; j++)
+	{
+		groupVelocities[numOfWaveVectorValues - 1][j] = (1.0 / 0.658) * (energies[numOfWaveVectorValues - 2][j] - energies[numOfWaveVectorValues - 1][j]) / qStep;
 	}
 	/* Output results */
 	std::string filenameEnergies = "energies.csv";
@@ -230,7 +240,7 @@ static void writeGroupVelocitiesToFile(std::string filename, float** groupVeloci
 
 	for (int i = 0; i < numOfWaveVectorValues - 1; i++)
 	{
-		for (int j = 0; j < dotsAmount; j++)
+		for (int j = 0; j < dotsAmount + 1; j++)
 		{
 			myFile << groupVelocities[i][j] << ',';
 		}

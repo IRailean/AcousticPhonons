@@ -5,7 +5,7 @@
 int main()
 {
 	int retVal = 0;
-	//retVal = solveOneLayerShear("Si");
+	//retVal = solveOneLayerShear("Ge");
     solveThreeLayerShear(2, 2);
 
 	return retVal;
