@@ -1,12 +1,13 @@
 #include <iostream>
 //#include "oneLayerShear.h"
-#include "threeLayerShear.h"
+//#include "threeLayerShear.h"
+#include "oneLayerASSA.h"
 
 int main()
 {
 	int retVal = 0;
 	//retVal = solveOneLayerShear("Ge");
-    solveThreeLayerShear(2, 2);
+	solveOneLayerASSA("Si");
 
 	return retVal;
 }

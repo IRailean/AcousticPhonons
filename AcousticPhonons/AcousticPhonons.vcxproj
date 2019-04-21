@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\oneLayerASSA.cpp" />
     <ClCompile Include="src\oneLayerShear.cpp" />
     <ClCompile Include="src\threeLayerShear.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\oneLayerASSA.h" />
     <ClInclude Include="inc\oneLayerShear.h" />
     <ClInclude Include="inc\main.h" />
     <ClInclude Include="inc\threeLayerShear.h" />

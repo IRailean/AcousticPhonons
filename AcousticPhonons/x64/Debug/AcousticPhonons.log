@@ -1,3 +1,3 @@
-﻿  threeLayerShear.cpp
-c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\threelayershear.cpp(45): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+﻿  oneLayerASSA.cpp
+c:\users\armyc_000\source\repos\gitacousticphonons\acousticphonons\acousticphonons\src\onelayerassa.cpp(47): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   AcousticPhonons.vcxproj -> C:\Users\armyc_000\source\repos\GitAcousticPhonons\AcousticPhonons\x64\Debug\AcousticPhonons.exe
