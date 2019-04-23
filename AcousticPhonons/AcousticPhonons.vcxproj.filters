@@ -33,6 +33,9 @@
     <ClCompile Include="src\oneLayerASSA.cpp">
       <Filter>Исходные файлы\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\threeLayerASSA.cpp">
+      <Filter>Исходные файлы\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\main.h">
@@ -45,6 +48,9 @@
       <Filter>Исходные файлы\inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\oneLayerASSA.h">
+      <Filter>Исходные файлы\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\threeLayerASSA.h">
       <Filter>Исходные файлы\inc</Filter>
     </ClInclude>
   </ItemGroup>
