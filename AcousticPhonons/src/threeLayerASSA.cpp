@@ -38,11 +38,11 @@ constexpr int dotsAmount = 100;
 static double  width = 6;
 
 // Step size along X3 axis
-static double step = width / (double)dotsAmount;
+static double step = width / ((double)dotsAmount);
 
 // Wave vector number of values
 // Wave vector values
-static double divider = 128;
+static double divider = 32;
 static double qFirst = 0;
 static double qLast = (2 * Pi) / latticeConstant_Ge;
 static double qStep = (Pi / divider) / latticeConstant_Ge;
@@ -64,12 +64,14 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 	double **coefU1_main_current = new double*[numOfWaveVectorValues];
 	double **coefU3_secondary_previous = new double*[numOfWaveVectorValues];
 	double **coefU3_secondary_next = new double*[numOfWaveVectorValues];
+	double **coefU3_secondary_current = new double*[numOfWaveVectorValues];
 
 	double **coefU3_main_previous = new double*[numOfWaveVectorValues];
 	double **coefU3_main_next = new double*[numOfWaveVectorValues];
 	double **coefU3_main_current = new double*[numOfWaveVectorValues];
 	double **coefU1_secondary_previous = new double*[numOfWaveVectorValues];
 	double **coefU1_secondary_next = new double*[numOfWaveVectorValues];
+	double **coefU1_secondary_current = new double*[numOfWaveVectorValues];
 
 	for (int k = 0; k < numOfWaveVectorValues; k++)
 	{
@@ -78,12 +80,14 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 		 coefU1_main_current[k] = new double[dotsAmount];
 		 coefU3_secondary_previous[k] = new double[dotsAmount];
 		 coefU3_secondary_next[k] = new double[dotsAmount];
+		 coefU3_secondary_current[k] = new double[dotsAmount];
 
 		 coefU3_main_previous[k] = new double[dotsAmount];
 		 coefU3_main_next[k] = new double[dotsAmount];
 		 coefU3_main_current[k] = new double[dotsAmount];
 		 coefU1_secondary_previous[k] = new double[dotsAmount];
 		 coefU1_secondary_next[k] = new double[dotsAmount];
+		 coefU1_secondary_current[k] = new double[dotsAmount];
 
 	}
 
@@ -102,7 +106,9 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 	double *c44 = new double[dotsAmount];
 	double *latticeConstant = new double[dotsAmount];
 	double *density = new double[dotsAmount];
-	double *alpha = new double[dotsAmount];
+	double *dc11_dx3 = new double[dotsAmount];
+	double *dc12_dx3 = new double[dotsAmount];
+	double *dc44_dx3 = new double[dotsAmount];
 
 	// Set constants in dependency of dot position, i.e where the dot is placed in structure
 	for (int i = 0; i < dotsAmount; i++)
@@ -110,7 +116,9 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 		double dotPos = i * width / dotsAmount;
 		if (dotPos < firstLeftBorder)
 		{
-			alpha[i] = 0;
+			dc11_dx3[i] = 0;
+			dc12_dx3[i] = 0;
+			dc44_dx3[i] = 0;
 			c11[i] = c11_Ge;
 			c12[i] = c12_Ge;
 			c44[i] = c44_Ge;
@@ -120,7 +128,9 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 		else if (dotPos >= firstLeftBorder && dotPos < firstRightBorder)
 		{
 			double deltaZ = firstRightBorder - dotPos;
-			alpha[i] = (c44_Ge - c44_Si) / -deltaL;
+			dc11_dx3[i] = (c11_Ge - c11_Si) / -deltaL;
+			dc12_dx3[i] = (c12_Ge - c12_Si) / -deltaL;
+			dc44_dx3[i] = (c44_Ge - c44_Si) / -deltaL;
 			c11[i] = (deltaZ*c11_Ge + (deltaL - deltaZ)*c11_Si) / deltaL;
 			c12[i] = (deltaZ*c12_Ge + (deltaL - deltaZ)*c12_Si) / deltaL;
 			c44[i] = (deltaZ*c44_Ge + (deltaL - deltaZ)*c44_Si) / deltaL;
@@ -129,7 +139,9 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 		}
 		else if (dotPos >= firstRightBorder && dotPos < secondLeftBorder)
 		{
-			alpha[i] = 0;
+			dc11_dx3[i] = 0;
+			dc12_dx3[i] = 0;
+			dc44_dx3[i] = 0;
 			c11[i] = c11_Si;
 			c12[i] = c12_Si;
 			c44[i] = c44_Si;
@@ -139,7 +151,9 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 		else if (dotPos > secondLeftBorder && dotPos < secondRightBorder)
 		{
 			double deltaZ = secondRightBorder - dotPos;
-			alpha[i] = (c44_Si - c44_Ge) / -deltaL;
+			dc11_dx3[i] = (c11_Ge - c11_Si) / -deltaL;
+			dc12_dx3[i] = (c12_Ge - c12_Si) / -deltaL;
+			dc44_dx3[i] = (c44_Ge - c44_Si) / -deltaL;
 			c11[i] = (deltaZ*c11_Si + (deltaL - deltaZ)*c11_Ge) / deltaL;
 			c12[i] = (deltaZ*c12_Si + (deltaL - deltaZ)*c12_Ge) / deltaL;
 			c44[i] = (deltaZ*c44_Si + (deltaL - deltaZ)*c44_Ge) / deltaL;
@@ -148,7 +162,9 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 		}
 		else if (dotPos >= secondRightBorder)
 		{
-			alpha[i] = 0;
+			dc11_dx3[i] = 0;
+			dc12_dx3[i] = 0;
+			dc44_dx3[i] = 0;
 			c11[i] = c11_Ge;
 			c12[i] = c12_Ge;
 			c44[i] = c44_Ge;
@@ -165,16 +181,18 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 		for (int i = 0; i < dotsAmount; i++)
 		{
 			coefU1_main_current[k][i] = (4.0 * c11[i] * pow(sin(k * (Pi / divider)), 2) / (pow(latticeConstant[i], 2)) + 2.0 * c44[i] / (step * step)) * (1.0 / density[i]);
-			coefU1_main_next[k][i] = -c44[i] / (density[i] * step * step);
-			coefU1_main_previous[k][i] = -c44[i] / (density[i] * step * step);
+			coefU1_main_next[k][i] = -(c44[i] / (density[i] * step * step) + dc44_dx3[i] / (2.0 * step * density[i]));
+			coefU1_main_previous[k][i] = -(c44[i] / (density[i] * step * step) - dc44_dx3[i] / (2.0 * step * density[i]));
 			coefU3_secondary_next[k][i] = (-c12[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step) - c44[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step)) * (1.0 / density[i]);
 			coefU3_secondary_previous[k][i] = (c12[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step) + c44[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step)) * (1.0 / density[i]);
+			coefU3_secondary_current[k][i] = dc44_dx3[i] * sin(k * (Pi / divider) * 2.0) / latticeConstant[i];
 
 			coefU3_main_current[k][i] = (4.0 * c44[i] * pow(sin(k * (Pi / divider)), 2.0) / pow(latticeConstant[i], 2.0) + 2.0 * c11[i] / (step * step)) * (1.0 / density[i]);
-			coefU3_main_next[k][i] = -c11[i] / (density[i] * step * step);
-			coefU3_main_previous[k][i] = -c11[i] / (density[i] * step * step);
+			coefU3_main_next[k][i] = -c11[i] / (density[i] * step * step) + dc11_dx3[i] / (2.0 * step * density[i]);
+			coefU3_main_previous[k][i] = -c11[i] / (density[i] * step * step) - dc11_dx3[i] / (2.0 * step * density[i]);;
 			coefU1_secondary_next[k][i] = (c12[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step) + c44[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step)) * (1.0 / density[i]);
 			coefU1_secondary_previous[k][i] = (-c12[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step) - c44[i] * sin(k * (Pi / divider) * 2.0) / (2.0 * latticeConstant[i] * step)) * (1.0 / density[i]);
+			coefU1_secondary_current[k][i] = dc12_dx3[i] * sin(k * (Pi / divider) * 2.0) / latticeConstant[i];
 		}
 	}
 
@@ -191,6 +209,7 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 			matrix[k][i][i + 1] = coefU1_main_next[k][i];
 
 			matrix[k][i][dotsAmount / 2 + i - 1] = coefU3_secondary_previous[k][i];
+			matrix[k][i][dotsAmount / 2 + i] = coefU3_secondary_current[k][i];
 			matrix[k][i][dotsAmount / 2 + i + 1] = coefU3_secondary_next[k][i];
 		}
 		for (int i = dotsAmount / 2 + 1; i < dotsAmount - 1; i++)
@@ -200,6 +219,7 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 			matrix[k][i][i + 1] = coefU3_main_next[k][i];
 
 			matrix[k][i][i - dotsAmount / 2 - 1] = coefU1_secondary_previous[k][i];
+			matrix[k][i][i - dotsAmount / 2] = coefU1_secondary_current[k][i];
 			matrix[k][i][i - dotsAmount / 2 + 1] = coefU1_secondary_next[k][i];
 		}
 	}
@@ -228,21 +248,21 @@ int solveThreeLayerASSA(double width_Ge, double width_Si)
 	{
 		matrix[k][0][0] = coefU1_main_current[k][0] - coefU3_secondary_previous[k][0] * coefFirst[k][0];
 		matrix[k][0][1] = coefU1_main_next[k][0] + coefU1_main_previous[k][0];
-		matrix[k][0][dotsAmount / 2] = coefU1_main_previous[k][0] * coefSecond[k][0];
+		matrix[k][0][dotsAmount / 2] = coefU1_main_previous[k][0] * coefSecond[k][0] + coefU3_secondary_current[k][0];
 		matrix[k][0][dotsAmount / 2 + 1] = coefU3_secondary_next[k][0] + coefU3_secondary_previous[k][0];
 
 		matrix[k][dotsAmount / 2 - 1][dotsAmount / 2 - 2] = coefU1_main_next[k][dotsAmount - 1] + coefU1_main_previous[k][dotsAmount - 1];
 		matrix[k][dotsAmount / 2 - 1][dotsAmount / 2 - 1] = coefU1_main_current[k][dotsAmount - 1] + coefU3_secondary_next[k][dotsAmount - 1] * coefFirst[k][dotsAmount - 1];
 		matrix[k][dotsAmount / 2 - 1][dotsAmount - 2] = coefU3_secondary_next[k][dotsAmount - 1] + coefU3_secondary_previous[k][dotsAmount - 1];
-		matrix[k][dotsAmount / 2 - 1][dotsAmount - 1] = -coefU1_main_next[k][dotsAmount - 1] * coefSecond[k][dotsAmount - 1];
+		matrix[k][dotsAmount / 2 - 1][dotsAmount - 1] = -coefU1_main_next[k][dotsAmount - 1] * coefSecond[k][dotsAmount - 1] + coefU3_secondary_current[k][dotsAmount - 1];
 
-		matrix[k][dotsAmount / 2][0] = -coefU3_main_previous[k][0] * coefFirst[k][0];
+		matrix[k][dotsAmount / 2][0] = -coefU3_main_previous[k][0] * coefFirst[k][0] + coefU1_secondary_current[k][0];
 		matrix[k][dotsAmount / 2][1] = coefU1_secondary_next[k][0] + coefU1_secondary_previous[k][0];
 		matrix[k][dotsAmount / 2][dotsAmount / 2] = coefU3_main_current[k][0] + coefU1_secondary_previous[k][0] * coefSecond[k][0];
 		matrix[k][dotsAmount / 2][dotsAmount / 2 + 1] = coefU3_main_next[k][0] + coefU3_main_previous[k][0];
 
 		matrix[k][dotsAmount - 1][dotsAmount / 2 - 2] = coefU1_secondary_next[k][dotsAmount - 1] + coefU1_secondary_previous[k][dotsAmount - 1];
-		matrix[k][dotsAmount - 1][dotsAmount / 2 - 1] = coefU3_main_next[k][dotsAmount - 1] * coefFirst[k][dotsAmount - 1];
+		matrix[k][dotsAmount - 1][dotsAmount / 2 - 1] = coefU3_main_next[k][dotsAmount - 1] * coefFirst[k][dotsAmount - 1] + coefU1_secondary_current[k][dotsAmount - 1];
 		matrix[k][dotsAmount - 1][dotsAmount - 2] = coefU3_main_next[k][dotsAmount - 1] + coefU3_main_previous[k][dotsAmount - 1];
 		matrix[k][dotsAmount - 1][dotsAmount - 1] = coefU3_main_current[k][dotsAmount - 1] - coefU1_secondary_next[k][dotsAmount - 1] * coefSecond[k][dotsAmount - 1];
 	}
